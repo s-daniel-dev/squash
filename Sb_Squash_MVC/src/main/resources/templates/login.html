@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title th:if="${userDto == null}" >LOGIN</title>
+		<title th:if="${userDto != null && userDto.getIsLoggedIn() == null}" >Change Password</title>
+	</head>
+	<body>
+		<p align="center" th:if="${resultDto != null && resultDto.isError() == true}">Your name and/or password is wrong!</p>
+		<form th:if="${userDto == null}" action="/login" method="post" align="center">
+			<input type="text" name="uname" placeholder="Username" required/><br>
+			<input type="password" name="upwd" placeholder="Password" required/><br>
+			<input type="submit" value="LOGIN"/>
+		</form>
+		
+		<form th:if="${userDto != null && userDto.getIsLoggedIn() == null}" action="/login/changepwd" method="post" align="center">
+			<input type="text" name="uname" placeholder="Username" required/><br>
+			<input type="password" name="oldpwd" placeholder="Old password" required/><br>
+			<input type="password" name="newpwd" placeholder="New password" required/><br>
+			<input type="submit" value="Change password"/>
+		</form>
+		
+	</body>
+</html>

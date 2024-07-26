@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Matchlist</title>
+	</head>
+	<body>
+		<p th:if="${resultDto != null && resultDto.isError() == false}">Changed your password!</p>
+		<table>
+			<tr>
+				<th>Location</th>
+				<th>User 1 name</th>
+				<th>User 1 points</th>
+				<th>User 2 name</th>
+				<th>User 2 points</th>
+				<th>Location Fee HUF</th>
+				<th>Location Fee EUR</th>
+				<th>Date</th>
+			</tr>
+			<tr th:each="matchDto : ${matchListDto.getMatches()}">
+				<td th:text="${matchDto.getLocationName()}"></td>
+				<td th:text="${matchDto.getUser1().getName()}"></td>
+				<td th:text="${matchDto.getUser1Points()}"></td>
+				<td th:text="${matchDto.getUser2().getName()}"></td>
+				<td th:text="${matchDto.getUser2Points()}"></td>
+				<td th:text="${matchDto.getLocFeeHUF()}"></td>
+				<td th:text="${matchDto.getLocFeeEUR()}"></td>
+				<td th:text="${matchDto.getDate()}"></td>
+			</tr>
+		</table>
+		
+	</body>
+</html>
