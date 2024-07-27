@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import Sd.Sb_Squash_MVC.model.Location;
 import Sd.Sb_Squash_MVC.model.Match;
+import Sd.Sb_Squash_MVC.model.SearchBy;
 import Sd.Sb_Squash_MVC.model.User;
 
 @Repository
@@ -56,17 +57,45 @@ public class Database {
 	}
 
 
-	public List<Match> getMatchList() {
+	public List<Match> getMatchList(SearchBy choice, Integer id) {
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		
-		SelectionQuery<Match> query = session.createSelectionQuery(
+		List<Match> matches = null;
+		
+		
+		if(choice == SearchBy.ALL) {
+			
+			SelectionQuery<Match> query = session.createSelectionQuery(
 					"SELECT m FROM Match m",
 					Match.class
 				);
-		
-		List<Match> matches = query.getResultList(); 
+			matches = query.getResultList(); 
+			
+		}
+		else if(choice == SearchBy.PLAYER) {
+			
+			SelectionQuery<Match> query = session.createSelectionQuery(
+					"SELECT m FROM Match m WHERE userOneId=?1 OR userTwoId=?1",
+					Match.class
+				);
+			query.setParameter(1, id);
+			
+			matches = query.getResultList();
+			
+		}
+		else if(choice == SearchBy.LOCATION) {
+			
+			SelectionQuery<Match> query = session.createSelectionQuery(
+					"SELECT m FROM Match m WHERE locationId=?1",
+					Match.class
+				);
+			query.setParameter(1, id);
+			
+			matches = query.getResultList(); 
+			
+		}
 		
 		tx.commit();
 		session.close();
@@ -139,6 +168,21 @@ public class Database {
 		
 		tx.commit();
 		session.close();
+		
+		return user;
+	}
+
+
+	public User getUserById(int userId) {
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		User user = session.get(User.class, userId);
+		
+		tx.commit();
+		session.close();
+		
 		
 		return user;
 	}

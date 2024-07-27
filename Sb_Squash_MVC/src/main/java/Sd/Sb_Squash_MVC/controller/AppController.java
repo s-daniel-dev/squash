@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import Sd.Sb_Squash_MVC.dto.MatchListDto;
 import Sd.Sb_Squash_MVC.dto.ResultDto;
 import Sd.Sb_Squash_MVC.dto.UserDto;
+import Sd.Sb_Squash_MVC.model.SearchBy;
 import Sd.Sb_Squash_MVC.service.AppService;
 
 @Controller
@@ -52,7 +53,7 @@ public class AppController {
 			if(userDto.getIsLoggedIn() != null) {
 				
 				returnValue = "index.html";
-				MatchListDto matchListDto = service.getMatchListDto();
+				MatchListDto matchListDto = service.getMatchListDto(SearchBy.ALL, null);
 				model.addAttribute("matchListDto", matchListDto);
 				
 			}
@@ -80,7 +81,7 @@ public class AppController {
 		if(userDto != null) {
 			
 			resultDto.setError(false);
-			MatchListDto matchListDto = service.getMatchListDto();
+			MatchListDto matchListDto = service.getMatchListDto(SearchBy.ALL, null);
 			model.addAttribute("matchListDto", matchListDto);
 			model.addAttribute("userDto", userDto);
 			returnValue = "index.html";
@@ -89,6 +90,42 @@ public class AppController {
 		model.addAttribute("resultDto", resultDto);
 		
 		return returnValue;
+	}
+	
+	@GetMapping("/matches/search/user")
+	public String searchAmoungMatchesByPlayer(
+				Model model,
+				@RequestParam("uid") int userId,
+				@RequestParam("playerid") int playerId
+			) {
+		
+		UserDto userDto = service.getUserDtoById(userId);
+		
+		MatchListDto matchListDto = service.getMatchListDto(SearchBy.PLAYER, playerId);
+		
+		model.addAttribute("userDto", userDto);
+		model.addAttribute("matchListDto", matchListDto);
+		
+		
+		return "index.html";
+	}
+	
+	@GetMapping("/matches/search/location")
+	public String searchAmoungMatchesByLocation(
+				Model model,
+				@RequestParam("uid") int userId,
+				@RequestParam("locationid") int locId
+			) {
+		
+		UserDto userDto = service.getUserDtoById(userId);
+		
+		MatchListDto matchListDto = service.getMatchListDto(SearchBy.LOCATION, locId);
+		
+		model.addAttribute("userDto", userDto);
+		model.addAttribute("matchListDto", matchListDto);
+		
+		
+		return "index.html";
 	}
 
 }

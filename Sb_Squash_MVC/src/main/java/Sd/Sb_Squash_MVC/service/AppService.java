@@ -14,6 +14,7 @@ import Sd.Sb_Squash_MVC.dto.MatchListDto;
 import Sd.Sb_Squash_MVC.dto.UserDto;
 import Sd.Sb_Squash_MVC.model.Location;
 import Sd.Sb_Squash_MVC.model.Match;
+import Sd.Sb_Squash_MVC.model.SearchBy;
 import Sd.Sb_Squash_MVC.model.User;
 
 @Service
@@ -47,7 +48,7 @@ public class AppService {
 
 
 
-	public MatchListDto getMatchListDto() {
+	public MatchListDto getMatchListDto(SearchBy choice, Integer id) {
 
 		
 		List<User> userList = db.getUserList();
@@ -56,11 +57,12 @@ public class AppService {
 		List<Location> locList = db.getLocationList();
 		List<LocationDto> locationDtoList = convertLocationListToDtoList(locList);
 		
-		List<Match> matchList = db.getMatchList();
+		List<Match> matchList = db.getMatchList(choice, id);
 		List<MatchDto> matchDtoList = convertMatchListToDtoList(matchList, locList, userList);
 		
+		MatchListDto matchListDto = new MatchListDto(matchDtoList, userDtoList, locationDtoList);
 		
-		return (new MatchListDto(matchDtoList, userDtoList, locationDtoList));
+		return matchListDto;
 	}
 
 
@@ -109,25 +111,29 @@ public class AppService {
 		
 		List<MatchDto> matchDtoList = new ArrayList<>();
 		
-		for(int index = 0; index < matchList.size(); index++) {
-			
-			Match match = matchList.get(index);
-			Location loc = getLocationById(match.getLocationId(), locList);
-			
-			MatchDto dto = new MatchDto(
-						loc.getName(),
-						match.getDate(),
-						getUserById(match.getUserOneId(), userList),
-						match.getUserOnePoints(),
-						getUserById(match.getUserTwoId(), userList),
-						match.getUserTwoPoints(),
-						loc.getFee()
-					);
-			
-			matchDtoList.add(dto);
-			
+		if(matchList != null) {
+			for(int index = 0; index < matchList.size(); index++) {
+				
+				Match match = matchList.get(index);
+				Location loc = getLocationById(match.getLocationId(), locList);
+				
+				MatchDto dto = new MatchDto(
+							loc.getName(),
+							match.getDate(),
+							getUserById(match.getUserOneId(), userList),
+							match.getUserOnePoints(),
+							getUserById(match.getUserTwoId(), userList),
+							match.getUserTwoPoints(),
+							loc.getFee()
+						);
+				
+				matchDtoList.add(dto);
+				
+			}
 		}
-		
+		else {
+			matchDtoList = null;
+		}
 		
 		return matchDtoList;
 	}
@@ -202,6 +208,22 @@ public class AppService {
 			
 		return userDto;
 	}
+
+
+
+	public UserDto getUserDtoById(int userId) {
+
+		
+		User user = db.getUserById(userId);
+		
+		UserDto userDto = convertUserToDto(user);
+		
+		
+		return userDto;
+	}
+
+
+
 	
 	
 
