@@ -1,5 +1,7 @@
 package Sd.Sb_Squash_MVC.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import Sd.Sb_Squash_MVC.dto.AdminDto;
 import Sd.Sb_Squash_MVC.dto.MatchListDto;
 import Sd.Sb_Squash_MVC.dto.ResultDto;
 import Sd.Sb_Squash_MVC.dto.UserDto;
@@ -126,6 +129,102 @@ public class AppController {
 		
 		
 		return "index.html";
+	}
+	
+	@GetMapping("/admin")
+	public String adminIndex(
+				Model model,
+				@RequestParam("uid") int userId
+			) {
+		
+		UserDto userDto = service.getUserDtoById(userId);
+		String result = "login.html";
+		AdminDto adminDto = null;
+		
+		if(userDto != null && userDto.getIsLoggedIn() == true && userDto.isAdmin() == true) {
+			
+			result = "admin.html";
+			adminDto = service.getAdminDto();
+			
+		}
+		
+		model.addAttribute("adminDto", adminDto);
+		
+		
+		return result;
+	}
+	
+	@PostMapping("/admin/reg/user")
+	public String registrateUser(
+				Model model,
+				@RequestParam("uname") String newUserName
+			) {
+		
+		
+		ResultDto resultDto = new ResultDto();
+		
+		int result = service.regUser(newUserName);
+		AdminDto adminDto = service.getAdminDto();
+		resultDto.setUserReg(result);
+		
+		
+		model.addAttribute("adminDto", adminDto);
+		model.addAttribute("resultDto", resultDto);
+		
+		
+		return "admin.html";
+	}
+	
+	@PostMapping("/admin/reg/loc")
+	public String registrateLocation(
+				Model model,
+				@RequestParam("name") String name,
+				@RequestParam("address") String address,
+				@RequestParam("fee") int fee
+			) {
+		
+		
+		ResultDto resultDto = new ResultDto();
+		
+		int result = service.regLocation(name, address, fee);
+		AdminDto adminDto = service.getAdminDto();
+		
+		resultDto.setLocationReg(result);
+		
+		model.addAttribute("adminDto", adminDto);
+		model.addAttribute("resultDto", resultDto);
+		
+		return "admin.html";
+	}
+	
+	
+	@PostMapping("/admin/reg/match")
+	public String registrateMatch(
+				Model model,
+				@RequestParam("user1id") int user1Id,
+				@RequestParam("user1points") int user1Points,
+				@RequestParam("user2id") int user2Id,
+				@RequestParam("user2points") int user2Points,
+				@RequestParam("locationid") int locId,
+				@RequestParam("date") LocalDate date
+			) {
+		
+		
+		ResultDto resultDto = new ResultDto();
+		
+		int result = service.regMatch(
+					user1Id, user1Points,
+					user2Id, user2Points,
+					locId, date
+				);
+		
+		resultDto.setMatchReg(result);
+		AdminDto adminDto = service.getAdminDto();
+		
+		model.addAttribute("adminDto", adminDto);
+		model.addAttribute("resultDto", resultDto);
+		
+		return "admin.html";
 	}
 
 }

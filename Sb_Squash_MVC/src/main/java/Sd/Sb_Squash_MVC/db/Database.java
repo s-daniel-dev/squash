@@ -188,6 +188,90 @@ public class Database {
 	}
 
 
+	public int regUserInDb(String newUserName) {
+
+		int result = 1;
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		SelectionQuery<User> query = session.createSelectionQuery(
+					"SELECT u FROM User u WHERE name=?1",
+					User.class
+				);
+		query.setParameter(1, newUserName);
+		
+		List<User> users = query.getResultList();
+		
+		if(users.size() == 0) {
+			
+			User user = new User();
+			user.setName(newUserName);
+			user.setId(0);
+			user.setPwd(newUserName);
+			user.setAdmin(false);
+			user.setIsLoggedIn(null);
+			session.persist(user);
+			result = 2;
+			
+		}
+		
+		tx.commit();
+		session.close();
+		
+		return result;
+	}
+
+
+	public int persistLocation(String name, String address, int fee) {
+
+		int result = 1;
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		SelectionQuery<Location> query = session.createSelectionQuery(
+					"SELECT l FROM Location l WHERE name=?1",
+					Location.class
+				);
+		query.setParameter(1, name);
+		
+		List<Location> locations = query.getResultList();
+		
+		if(locations.size() == 0) {
+			
+			result = 2;
+			
+			Location loc = new Location();
+			loc.setName(name);
+			loc.setId(0);
+			loc.setAddress(address);
+			loc.setFee(fee);
+			
+			session.persist(loc);
+			
+		}
+		
+		tx.commit();
+		session.close();
+		
+		
+		return result;
+	}
+
+
+	public void persistMatch(Match match) {
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		session.persist(match);
+		
+		tx.commit();
+		session.close();
+		
+	}
+
+
 	
 	
 	

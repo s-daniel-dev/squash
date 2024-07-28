@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		<p th:if="${resultDto != null && resultDto.isError() == false}">Changed your password!</p>
-		<a  href="http://localhost:8080/admin" th:if="${userDto.isAdmin() == true}" >Admin</a>
+		<a  th:href="'http://localhost:8080/admin?uid=' + ${userDto.getId()}" th:if="${userDto.isAdmin() == true}" >Admin</a>
 		<form action="/matches/search/user" method="get" >
 			<select name="playerid" >
 				<option th:each="player : ${matchListDto.getUsers()}" th:text="${player.getName()}" th:value="${player.getId()}"></option>

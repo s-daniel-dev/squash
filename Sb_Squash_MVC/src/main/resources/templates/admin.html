@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Admin</title>
+	</head>
+	<body>
+		<table th:if="${resultDto != null}">
+			<tr>
+				<td th:if="${resultDto.isUserReg() == 2}">User registration successful.</td>
+				<td th:if="${resultDto.isUserReg() == 1}">User name used, try another one, please.</td>
+				<td th:if="${resultDto.isLocationReg() == 2}">Location registration successful.</td>
+				<td th:if="${resultDto.isLocationReg() == 1}">Location name used, try another one, please.</td>
+				<td th:if="${resultDto.isMatchReg() == 2}">Match registration successful.</td>
+				<td th:if="${resultDto.isMatchReg() == 1}">No player can play with herself/himself, and somebody has to win.</td>
+			</tr>
+		</table>
+		<form action="/admin/reg/user" method="post">
+			<input type="text" name="uname" placeholder="Username" required/>
+			<input type="submit" value="Submit User" />
+		</form>
+		<form action="/admin/reg/loc" method="post">
+			<input type="text" name="name" placeholder="Location Name" required />
+			<input type="text" name="address" placeholder="Location Address" required />
+			<input type="number" name="fee" placeholder="Location Fee" required />
+			<input type="submit" value="Submit Location" />
+		</form>
+		<form action="/admin/reg/match" method="post">
+			<select name="user1id">
+				<option th:each="userDto : ${adminDto.getUserList()}" th:text="${userDto.getName()}" th:value="${userDto.getId()}"></option>
+			</select>
+			<input type="number" name="user1points" placeholder="User 1 Points" required />
+			<select name="user2id">
+				<option th:each="userDto : ${adminDto.getUserList()}" th:text="${userDto.getName()}" th:value="${userDto.getId()}"></option>
+			</select>
+			<input type="number" name="user2points" placeholder="User 1 Points" required />
+			<select name="locationid">
+				<option th:each="locationDto : ${adminDto.getLocList()}" th:text="${locationDto.getName()}" th:value="${locationDto.getId()}"></option>
+			</select>
+			<input type="date" name="date" placeholder="Date" required />
+			<input type="submit" value="Submit Match"/>
+		</form>
+	</body>
+</html>

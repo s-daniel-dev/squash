@@ -1,6 +1,7 @@
 package Sd.Sb_Squash_MVC.service;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import Sd.Sb_Squash_MVC.db.Database;
+import Sd.Sb_Squash_MVC.dto.AdminDto;
 import Sd.Sb_Squash_MVC.dto.LocationDto;
 import Sd.Sb_Squash_MVC.dto.MatchDto;
 import Sd.Sb_Squash_MVC.dto.MatchListDto;
+
 import Sd.Sb_Squash_MVC.dto.UserDto;
 import Sd.Sb_Squash_MVC.model.Location;
 import Sd.Sb_Squash_MVC.model.Match;
@@ -220,6 +223,64 @@ public class AppService {
 		
 		
 		return userDto;
+	}
+
+
+
+	public AdminDto getAdminDto() {
+
+		List<User> userList = db.getUserList();
+		List<UserDto> userDtoList = convertUserListToDtoList(userList);
+		
+		List<Location> locList = db.getLocationList();
+		List<LocationDto> locationDtoList = convertLocationListToDtoList(locList);
+		
+		AdminDto adminDto = new AdminDto(userDtoList, locationDtoList);
+		
+		return adminDto;
+	}
+
+
+
+	public int regUser(String newUserName) {
+
+		int result = db.regUserInDb(newUserName);
+		
+		return result;
+	}
+
+
+
+	public int regLocation(String name, String address, int fee) {
+
+		int result = db.persistLocation(name, address, fee);
+		
+		return result;
+	}
+
+
+
+	public int regMatch(int user1Id, int user1Points, int user2Id, int user2Points, int locId, LocalDate date) {
+
+		int result = 1;
+		int diff = Math.abs(user1Points - user2Points);
+		
+		
+		if(user1Id != user2Id && diff > 1 && user1Points > 6 && user2Points > 6) {
+			result = 2;
+			Match match = new Match();
+			match.setId(0);
+			match.setUserOneId(user1Id);
+			match.setUserOnePoints(user1Points);
+			match.setUserTwoId(user2Id);
+			match.setUserTwoPoints(user2Points);
+			match.setLocationId(locId);
+			match.setDate(date);
+			
+			db.persistMatch(match);
+		}
+		
+		return result;
 	}
 
 
