@@ -1,5 +1,6 @@
 package Sd.Sb_Squash_MVC.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class MatchListDto {
@@ -14,6 +15,7 @@ public class MatchListDto {
 		this.matches = matches;
 		this.users = users;
 		this.locations = locations;
+		sortMatches();
 	}
 
 
@@ -39,6 +41,26 @@ public class MatchListDto {
 
 	public void setLocations(List<LocationDto> locations) {
 		this.locations = locations;
+	}
+	
+	private void sortMatches() {
+		
+		for(int index = 0; index < (matches.size() - 1); index++) {
+			
+			LocalDate match1 = matches.get(index).getDate();
+			LocalDate match2 = matches.get(index + 1).getDate();
+			MatchDto dto1 = matches.get(index);
+			MatchDto dto2 = matches.get(index + 1);
+			
+			
+			if(match1.isBefore(match2)) {
+				matches.set(index, dto2);
+				matches.set(index + 1, dto1);
+				index = -1;
+			}
+				
+			
+		}
 	}
 	
 }
