@@ -266,7 +266,7 @@ public class AppService {
 		int diff = Math.abs(user1Points - user2Points);
 		
 		
-		if(user1Id != user2Id && diff > 1 && user1Points > 6 && user2Points > 6) {
+		if(user1Id != user2Id && diff > 1 && (user1Points > 8 || user2Points > 8)) {
 			result = 2;
 			Match match = new Match();
 			match.setId(0);
