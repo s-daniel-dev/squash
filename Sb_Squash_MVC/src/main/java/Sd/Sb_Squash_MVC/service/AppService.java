@@ -4,6 +4,7 @@ package Sd.Sb_Squash_MVC.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -249,10 +250,38 @@ public class AppService {
 
 
 	public int regUser(String newUserName) {
+		
+		String password = generatePwd();
+		
+		User user = new User();
+		user.setId(0);
+		user.setName(newUserName);
+		user.setPwd(password);
+		user.setAdmin(false);
+		user.setIsLoggedIn(null);
 
-		int result = db.regUserInDb(newUserName);
+		int result = db.regUserInDb(user);
 		
 		return result;
+	}
+
+
+
+	private String generatePwd() {
+
+		String pwd = "";
+		
+		Random rand = new Random();
+		
+		for(int index = 0; index < 5; index++) {
+			
+			int randNumb = rand.nextInt(33, 127);
+			pwd = pwd + Character.toString(randNumb);
+			
+		}
+		
+		
+		return pwd;
 	}
 
 

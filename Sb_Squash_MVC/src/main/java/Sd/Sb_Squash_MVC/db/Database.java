@@ -188,7 +188,7 @@ public class Database {
 	}
 
 
-	public int regUserInDb(String newUserName) {
+	public int regUserInDb(User user) {
 
 		int result = 1;
 		Session session = sessionFactory.openSession();
@@ -198,18 +198,12 @@ public class Database {
 					"SELECT u FROM User u WHERE name=?1",
 					User.class
 				);
-		query.setParameter(1, newUserName);
+		query.setParameter(1, user.getName());
 		
 		List<User> users = query.getResultList();
 		
 		if(users.size() == 0) {
 			
-			User user = new User();
-			user.setName(newUserName);
-			user.setId(0);
-			user.setPwd(newUserName);
-			user.setAdmin(false);
-			user.setIsLoggedIn(null);
 			session.persist(user);
 			result = 2;
 			
