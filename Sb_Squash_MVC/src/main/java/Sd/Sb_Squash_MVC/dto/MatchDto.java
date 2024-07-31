@@ -2,6 +2,8 @@ package Sd.Sb_Squash_MVC.dto;
 
 import java.time.LocalDate;
 
+
+
 public class MatchDto {
 	
 	private String locationName;
@@ -18,13 +20,11 @@ public class MatchDto {
 
 
 
-	public MatchDto(
-			String locationName, LocalDate date,
-			UserDto user1, int user1Points,
-			UserDto user2, int user2Points,
-			int locFeeHUF
-			) {
-		
+	
+
+	public MatchDto(String locationName, LocalDate date, UserDto user1, int user1Points, UserDto user2, int user2Points,
+			int locFeeHUF, Double eurFee) {
+		super();
 		this.locationName = locationName;
 		this.date = date;
 		this.user1 = user1;
@@ -32,8 +32,7 @@ public class MatchDto {
 		this.user2 = user2;
 		this.user2Points = user2Points;
 		this.locFeeHUF = locFeeHUF;
-		this.locFeeEUR = null;
-		
+		this.locFeeEUR = eurFee;
 	}
 
 	public LocalDate getDate() {

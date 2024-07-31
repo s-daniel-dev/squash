@@ -7,14 +7,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import Sd.Sb_Squash_MVC.db.Database;
 import Sd.Sb_Squash_MVC.dto.AdminDto;
 import Sd.Sb_Squash_MVC.dto.LocationDto;
 import Sd.Sb_Squash_MVC.dto.MatchDto;
 import Sd.Sb_Squash_MVC.dto.MatchListDto;
-
 import Sd.Sb_Squash_MVC.dto.UserDto;
+import Sd.Sb_Squash_MVC.model.Exchange;
 import Sd.Sb_Squash_MVC.model.Location;
 import Sd.Sb_Squash_MVC.model.Match;
 import Sd.Sb_Squash_MVC.model.SearchBy;
@@ -120,6 +121,10 @@ public class AppService {
 				Match match = matchList.get(index);
 				Location loc = getLocationById(match.getLocationId(), locList);
 				
+				RestTemplate rt = new RestTemplate();
+				
+				Exchange eurFee = rt.getForObject("http://localhost:8081/exchange?huf=" + loc.getFee(), Exchange.class);
+				
 				MatchDto dto = new MatchDto(
 							loc.getName(),
 							match.getDate(),
@@ -127,7 +132,8 @@ public class AppService {
 							match.getUserOnePoints(),
 							getUserById(match.getUserTwoId(), userList),
 							match.getUserTwoPoints(),
-							loc.getFee()
+							loc.getFee(),
+							eurFee.getEur()
 						);
 				
 				matchDtoList.add(dto);
