@@ -1,15 +1,19 @@
 package Sd.Sb_Squash_MVC.service;
 
 
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.jdom2.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import Sd.Sb_Squash_MVC.XMLParser.XMLParser;
 import Sd.Sb_Squash_MVC.db.Database;
 import Sd.Sb_Squash_MVC.dto.AdminDto;
 import Sd.Sb_Squash_MVC.dto.LocationDto;
@@ -26,11 +30,13 @@ import Sd.Sb_Squash_MVC.model.User;
 public class AppService {
 	
 	private Database db;
+	private XMLParser parser;
 	
 	@Autowired
-	public AppService(Database db) {
+	public AppService(Database db, XMLParser parser ) {
 		super();
 		this.db = db;
+		this.parser = parser;
 	}
 
 
@@ -316,6 +322,48 @@ public class AppService {
 		}
 		
 		return result;
+	}
+
+
+
+	public boolean getXMLFile() {
+		
+		boolean result = true;
+		List<User> userList = db.getUserList();
+		List<Location> locList = db.getLocationList();
+		List<Match> matchList = db.getMatchList(SearchBy.ALL, null);
+		
+		try {
+			
+			parser.makeXML(userList, locList, matchList);
+			
+		}
+		catch(Exception e) {
+			result = false;
+		}
+		
+		
+		return result;
+	}
+
+
+
+	public MatchListDto getMatchListDtoFromXML() throws JDOMException, IOException {
+
+		
+		List<User> userList = parser.getUserList();
+		List<UserDto> userDtoList = convertUserListToDtoList(userList);
+		
+		List<Location> locList = parser.getLocationList();
+		List<LocationDto> locDtoList = convertLocationListToDtoList(locList);
+		
+		List<Match> matchList = parser.getMatchList();
+		List<MatchDto> matchDtoList = convertMatchListToDtoList(matchList, locList, userList);
+		
+		MatchListDto matchListDto = new MatchListDto(matchDtoList, userDtoList, locDtoList);
+		
+		
+		return matchListDto;
 	}
 
 

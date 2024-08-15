@@ -26,6 +26,20 @@ public class Location {
 	@Column(name = "fee")
 	private int fee;
 	
+
+	
+	public Location() {
+		super();
+	}
+
+	public Location(int id, String name, String address, int fee) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.fee = fee;
+	}
+	
 	
 
 	public int getId() {

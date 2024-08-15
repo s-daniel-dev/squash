@@ -6,6 +6,7 @@ public class UserDto {
 	private String name;
 	private Boolean isLoggedIn;
 	private boolean isAdmin;
+	private DataSource ds;
 	
 	
 	public UserDto(int id, String name, Boolean isLoggedIn, boolean isAdmin) {
@@ -14,6 +15,7 @@ public class UserDto {
 		this.name = name;
 		this.isLoggedIn = isLoggedIn;
 		this.isAdmin = isAdmin;
+		this.ds = DataSource.NULL;
 	}
 
 
@@ -47,6 +49,14 @@ public class UserDto {
 
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+
+	public DataSource getDs() {
+		return ds;
+	}
+
+	public void setDs(DataSource ds) {
+		this.ds = ds;
 	}
 
 }

@@ -29,6 +29,19 @@ public class User {
 	private Boolean isLoggedIn;
 	
 	
+	public User() {
+		super();
+	}
+
+	public User(int id, String name, String pwd, boolean isAdmin, Boolean isLoggedIn) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.pwd = pwd;
+		this.isAdmin = isAdmin;
+		this.isLoggedIn = isLoggedIn;
+	}
+
 	public int getId() {
 		return id;
 	}

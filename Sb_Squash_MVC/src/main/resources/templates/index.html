@@ -43,6 +43,7 @@
 				<td th:text="${matchDto.getDate()}"></td>
 			</tr>
 		</table>
-		
+		<a href="/showxml" >Make XML</a>
+		<a th:href="'/xml/read?uid=' + ${userDto.getId()}"  >Show matches from XML</a>
 	</body>
 </html>

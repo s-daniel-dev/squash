@@ -1,7 +1,10 @@
 package Sd.Sb_Squash_MVC.controller;
 
+
+import java.io.IOException;
 import java.time.LocalDate;
 
+import org.jdom2.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -225,6 +228,33 @@ public class AppController {
 		model.addAttribute("resultDto", resultDto);
 		
 		return "admin.html";
+	}
+	
+	@GetMapping("/xml/create")
+	public String makeXML(Model model) {
+		
+		boolean result = service.getXMLFile();
+		
+		model.addAttribute("result", result);
+		
+		return "result.html";
+	}
+	
+	@GetMapping("/xml/read")
+	public String showMatchListFromXML(
+				Model model,
+				@RequestParam("uid") int userId
+			) throws JDOMException, IOException {
+		
+		UserDto userDto = service.getUserDtoById(userId);
+		MatchListDto matchListDto = service.getMatchListDtoFromXML();
+		
+		model.addAttribute("userDto", userDto);
+		model.addAttribute("matchListDto", matchListDto);
+		
+		
+		
+		return "index.html";
 	}
 
 }

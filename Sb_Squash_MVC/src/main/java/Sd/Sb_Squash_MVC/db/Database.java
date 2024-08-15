@@ -74,7 +74,7 @@ public class Database {
 			matches = query.getResultList(); 
 			
 		}
-		else if(choice == SearchBy.PLAYER) {
+		else if(choice == SearchBy.PLAYER && id != null) {
 			
 			SelectionQuery<Match> query = session.createSelectionQuery(
 					"SELECT m FROM Match m WHERE userOneId=?1 OR userTwoId=?1",
@@ -85,7 +85,7 @@ public class Database {
 			matches = query.getResultList();
 			
 		}
-		else if(choice == SearchBy.LOCATION) {
+		else if(choice == SearchBy.LOCATION && id != null) {
 			
 			SelectionQuery<Match> query = session.createSelectionQuery(
 					"SELECT m FROM Match m WHERE locationId=?1",
