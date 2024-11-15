@@ -65,6 +65,7 @@ public class AppController {
 			}
 			
 			model.addAttribute("userDto", userDto);
+			
 		}
 		
 		
@@ -148,10 +149,9 @@ public class AppController {
 			
 			result = "admin.html";
 			adminDto = service.getAdminDto();
+			model.addAttribute("adminDto", adminDto);
 			
 		}
-		
-		model.addAttribute("adminDto", adminDto);
 		
 		
 		return result;

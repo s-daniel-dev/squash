@@ -48,10 +48,6 @@ public class Database {
 		
 		if(users.size() > 0) {
 			user = users.get(0);
-			if(user.getIsLoggedIn() == null) {
-				user.setIsLoggedIn(true);
-				session.merge(user);
-			}
 		}
 		
 		tx.commit();
